@@ -16,3 +16,4 @@ This is HTML5 application, built with [Brunch](http://brunch.io).
     * Place static files you want to be copied from `app/assets/` to `public/`.
     * [Brunch site](http://brunch.io), [Chaplin site](http://chaplinjs.org)
 # bloc-jams
+# bloc-jams
