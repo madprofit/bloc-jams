@@ -1,5 +1,6 @@
 html {
-  height: 100%; }
+  height: 100%;
+  background: #5b5579; }
 
 p {
   font-size: 20px; }
@@ -7,7 +8,9 @@ p {
 body {
   font-family: 'Open Sans';
   color: white;
-  min-height: 100%; }
+  min-height: 100%;
+  background: -webkit-radial-gradient(#2b1339, #380c77);
+  background: radial-gradient(#2b1339, #380c77); }
 
 body.landing {
   background: #5b5579; }
@@ -15,11 +18,6 @@ body.landing {
 .hero-content {
   background: #2f1d57;
   padding: 100px; }
-
-.hero-content h1 {
-  font-size: 70px;
-  margin-bottom: 50px;
-  font-weight: 300; }
 
 .hero-content h1 {
   font-size: 70px;
