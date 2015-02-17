@@ -91,37 +91,37 @@
   globals.require.brunch = true;
 })();
 require.register("scripts/album", function(exports, require, module) {
-//Example Album
-var albumPicasso = {
-    name: 'The Colors',
-    artist: 'Pablo Picasso',
-    label: 'Cubism',
-    year: '1881',
-    albumArtUrl: '/images/album-placeholder.png',
-    songs: [
-        { name: 'Blue', length: '4:26' },
-        { name: 'Green', lenght: '3:14' },
-        { name: 'Red', length: '5:01' },
-        { name: 'Pink', length; '3:21'},
-        { name; 'Magenta', length: '2:15'}
-        ]
-}:
-
-//Another Example Album
-var albumMarconi = {
-    name: 'The Telephone',
-    artist: 'Guglielmo Marconi',
-    label: 'Em',
-    year: '1909',
-    albumArtUrl: '/images/album-placeholder.png',
-    songs: [
-        { name: 'Hello, Operator?', length: '1:01' },
-        { name: 'Ring, ring, ring', length: '5:01' },
-        { name: 'Fits in your pocket', length: '3:21'},
-        { name: 'Can you hear me now?', length: '3:14;' },
-        { name: 'Wrong phone number', length: '2:15'}
-      ]
-}; 
+ // Example Album
+ var albumPicasso = {
+   name: 'The Colors',
+   artist: 'Pablo Picasso',
+   label: 'Cubism',
+   year: '1881',
+   albumArtUrl: '/images/album-placeholder.png',
+   songs: [
+       { name: 'Blue', length: '4:26' },
+       { name: 'Green', length: '3:14' },
+       { name: 'Red', length: '5:01' },
+       { name: 'Pink', length: '3:21'},
+       { name: 'Magenta', length: '2:15'}
+     ]
+ };
+ 
+ // Another Example Album
+ var albumMarconi = {
+   name: 'The Telephone',
+   artist: 'Guglielmo Marconi',
+   label: 'EM',
+   year: '1909',
+   albumArtUrl: '/images/album-placeholder.png',
+   songs: [
+       { name: 'Hello, Operator?', length: '1:01' },
+       { name: 'Ring, ring, ring', length: '5:01' },
+       { name: 'Fits in your pocket', length: '3:21'},
+       { name: 'Can you hear me now?', length: '3:14' },
+       { name: 'Wrong phone number', length: '2:15'}
+     ]
+ };
 
  var createSongRow = function(songNumber, songName, songLength) {
    var template =
@@ -177,16 +177,18 @@ var albumMarconi = {
 });
 
 ;require.register("scripts/app", function(exports, require, module) {
-require("./landing");
-require("./collection");
-require("./album");
+require('./landing');
+require('./collection');
+require('./album');
 });
 
 ;require.register("scripts/collection", function(exports, require, module) {
  var buildAlbumThumbnail = function() {
     var template =
       '<div class="collection-album-container col-md-2">'
+     + '  <div class="collection-album-image-container">'
      + '  <img src="/images/album-placeholder.png"/>'
+     + '  </div>'
      + '  <div class="caption album-collection-info">'
      + '    <p>'
      + '      <a class="album-name" href="/album.html"> Album Name </a>'
@@ -202,15 +204,43 @@ require("./album");
    return $(template);
  };
 
-  var updateCollectionView = function() {
-    var $collection = $(".collection-container .row");
-    $collection.empty();
+ var buildAlbumOverlay = function(albumURL) {
+    var template =
+        '<div class="collection-album-image-overlay">'
+      + '  <div class="collection-overlay-content">'
+      + '      <a class="collection-overlay-button" href="' + albumURL + '">'
+      + '       <i class="fa fa-play"></i>'
+      + '      </a>'
+      + '      &nbsp;'
+      + '      <a class="collection-overlay-button">'
+      + '        <i class="fa fa-plus"></i>'
+      + '      </a>'
+      + '  </div>'
+      + '</div>'
+      ;
+      return $(template);
+ };
 
-    for (var i = 0; i < 33; i++) {
-       var $newThumbnail = buildAlbumThumbnail();
-       $collection.append($newThumbnail);
-     }
+
+var updateCollectionView = function() {
+  var $collection = $(".collection-container .row");
+  $collection.empty();
+
+for (var i = 0; i < 33; i++) {
+   var $newThumbnail = buildAlbumThumbnail();
+   $collection.append($newThumbnail);
+  }
+
+   var onHover = function(event) {
+    $(this).append(buildAlbumOverlay("/album.html"));
   };
+   
+  var offHover = function(event) {
+    $(this).find('.collection-album-image-overlay').remove();
+  };
+
+  $collection.find('.collection-album-image-container').hover(onHover, offHover);
+};
  
 if (document.URL.match(/\/collection.html/)) {
   // Wait until the HTML is fully processed.
