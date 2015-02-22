@@ -270,6 +270,7 @@ require('./landing');
 require('./collection');
 require('./album');
 require('./profile');
+
 });
 
 ;require.register("scripts/collection", function(exports, require, module) {
