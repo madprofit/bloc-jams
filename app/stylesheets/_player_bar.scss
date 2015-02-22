@@ -43,6 +43,20 @@
         margin-right: 60px;
         font-size: 30px
       }
+
+      .previous,
+      .next,
+      .play-pause {
+        opacity: 1;
+        transition: .3s opacity;
+      }
+
+      .previous:hover,
+      .next:hover,
+      .play-pause:hover {
+        opacity: .5;
+        transition: .3s opacity;
+      }
     }
  
     .currently-playing {

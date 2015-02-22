@@ -209,6 +209,48 @@ var createSongRow = function(songNumber, songName, songLength) {
    }
  
  };
+
+ var updateSeekPercentage = function($seekBar, event) {
+  var barWidth = $seekBar.width();
+  var offsetX = event.pageX - $seekBar.offset().left;
+
+  var offsetXPercent = (offsetX / barWidth) * 100;
+  offsetXPercent = Math.max(0, offsetXPercent);
+  offsetXPercent = Math.min(100, offsetXPercent);
+
+  var percentageString = offsetXPercent + '%';
+  $seekBar.find('.fill').width(percentageString);
+  $seekBar.find('.thumb').css({left: percentageString});
+
+  var setupSeekBars = function() {
+
+    $seekBars = $('.player-bar .seek-bar');
+    $seekBars.click(function(event) {
+    updateSeekPercentage($(this), event);
+  });
+
+    $seekBars.find('.thumb').mousedown(function(event){
+      var $seekBar = $(this).parent();
+
+        $seekBar.addClass('no-animate');
+
+      $(document).bind('mouseup.thumb', function(event){
+        updateSeekPercentage($seekBar, event);
+      });
+
+    //cleanup
+    $(document).bind('mouseup.thumb', function() {
+        $seekBar.removeClass('no-animate');
+
+      $(document).unbind('mousemove.thumb');
+      $(document).unbind('mouseup. thumb');
+    });
+
+   });
+
+ };
+
+ 
  
  // This 'if' condition is used to prevent the jQuery modifications
  // from happening on non-Album view pages.
@@ -216,7 +258,8 @@ var createSongRow = function(songNumber, songName, songLength) {
  if (document.URL.match(/\/album.html/)) {
    // Wait until the HTML is fully processed.
    $(document).ready(function() {
-      changeAlbumView(albumPicasso);
+      changeAlbumView(albumPicasso)
+        setupSeekBars();
     });
   }
 
@@ -226,6 +269,7 @@ var createSongRow = function(songNumber, songName, songLength) {
 require('./landing');
 require('./collection');
 require('./album');
+require('./profile');
 });
 
 ;require.register("scripts/collection", function(exports, require, module) {
@@ -316,6 +360,33 @@ $(document).ready(function() {
  
    $('.selling-points .point').hover(onHoverAction, offHoverAction);
 });
+});
+
+;require.register("scripts/profile", function(exports, require, module) {
+//holds the name of our tab button container for selection later in the function
+var tabsContainer = ".user-profile-tabs-container"
+var selectTabHandler = function(event) {
+};
+
+var tabsContainer = ".user-profile-tabs-container"
+var selectTabHandler = function(event) {
+    $tab = $(this);
+    $(tabsContainer + "li").removeClass('active');
+    $tab.parent().addClass('active');
+    selectedTabName = $tab.attr('href');
+    console.log(selectedTabName);
+    $(".tab-pane").addClass('hidden');
+    $(selectedTabName).removeClass('hidden');
+    event.preventDefault();
+};
+
+if (document.URL.match(/\/profile.html/)) {
+    $(document).ready(function() {
+        var $tabs = $(tabsContainer + " a");
+        $tabs.hover(selectTabHandler);
+        $tabs[0].hover();
+    });
+}
 });
 
 ;
