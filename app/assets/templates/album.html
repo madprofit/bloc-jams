@@ -61,7 +61,7 @@
           <span ng-switch="getSongState(song)">
             <span ng-switch-when="playing">
               <a class="album-song-button" ng-click="pauseSong(song)">
-                <1 class="fa fa-pause"></1>
+                <i class="fa fa-pause"></i>
               </a>
             </span>
             <span ng-switch-when="hovered">
@@ -79,5 +79,6 @@
        </tr>
     </table>
   </div>
+    <ng-include src="'/templates/player_bar.html'"></ng-include>
 </div>
 >>>>>>> angular-album-view

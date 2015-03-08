@@ -304,20 +304,20 @@ blocJams.config(['$stateProvider', '$locationProvider', function($stateProvider,
     templateUrl: '/templates/collection.html'
   });
 
-<<<<<<< HEAD
+//<<<<<<< HEAD
     $stateProvider.state('album', {
      url: '/album',
      templateUrl: '/templates/album.html',
      controller: 'Album.controller'
    });
 
-=======
+//=======
   $stateProvider.state('album', {
     url: '/album',
     templateUrl: '/templates/album.html',
     controller: 'Album.controller'
   })
->>>>>>> angular-album-view
+//>>>>>>> angular-album-view
 }]);
 
 blocJams.controller('Landing.controller', ['$scope', function($scope) {
@@ -347,8 +347,8 @@ blocJams.controller('Landing.controller', ['$scope', function($scope) {
       }
   }]);
 
-<<<<<<< HEAD
-blocJams.contoller('Album.controller', ['$scope', function($scope) {
+//<<<<<<< HEAD
+blocJams.controller('Album.controller', ['$scope', function($scope) {
   $scope.album = angular.copy(albumPicasso);
 
     var hoveredSong = null;
@@ -367,12 +367,12 @@ blocJams.contoller('Album.controller', ['$scope', function($scope) {
           return 'playing';
         }
         else if (song === hoveredSong) {
-          return 'hovered':
+          return 'hovered';
         }
         return 'default';
       };
 
-=======
+//=======
   blocJams.controller('Album.controller', ['$scope', function($scope) {
     $scope.album = angular.copy(albumPicasso);
 
@@ -383,9 +383,10 @@ blocJams.contoller('Album.controller', ['$scope', function($scope) {
         hoveredSong = song;
       };
 
-      $scope.onHoverSong = function(song) {
+      $scope.offHoverSong = function(song) {
         hoveredSong = null;
       };
+      }]);
 
         $scope.getSongState = function(song) {
           if (song === playingSong) {
@@ -397,7 +398,7 @@ blocJams.contoller('Album.controller', ['$scope', function($scope) {
           return 'default';
         };
 
->>>>>>> angular-album-view
+//>>>>>>> angular-album-view
         $scope.playSong = function(song) {
           playingSong = song;
         };
@@ -405,11 +406,12 @@ blocJams.contoller('Album.controller', ['$scope', function($scope) {
         $scope.pauseSong = function(song) {
           playingSong = null;
         };
-<<<<<<< HEAD
-}]);
-=======
-  }]);
->>>>>>> angular-album-view
+          }]);
+//<<<<<<< HEAD
+
+//=======
+
+//>>>>>>> angular-album-view
 
 });
 
