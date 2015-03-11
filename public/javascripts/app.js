@@ -343,7 +343,7 @@ blocJams.controller('Landing.controller', ['$scope', function($scope) {
         }
   }]);
 
-  blocJams.controller('Album.controller', ['$scope', 'SongPlayer', function($scope, SongPlayer) {
+  blocJams.controller('Album.controller', ['$scope', 'SongPlayer', 'ConsoleLogger', function($scope, SongPlayer) {
     $scope.album = angular.copy(albumPicasso);
 
       var hoveredSong = null;
@@ -382,6 +382,10 @@ blocJams.controller('Landing.controller', ['$scope', function($scope) {
   $scope.songPlayer = SongPlayer;
 }]);
 
+  blocJams.service('ConsoleLogger', function() {
+    console.log('Hello World');
+  }); 
+
     blocJams.service('SongPlayer', function() {
         var currentSoundFile = null;
         var trackIndex = function(album, song) {
@@ -401,7 +405,8 @@ blocJams.controller('Landing.controller', ['$scope', function($scope) {
           var currentTrackIndex = trackIndex(this.currentAlbum, this.currentSong);
           currentTrackIndex++;
           if (currentTrackIndex >= this.currentAlbum.songs.length) {
-            currentTrackIndex = 0;
+            this.playing = false;
+            this.setSong(null, null);
           }
           var song = this.currentAlbum.songs[currentTrackIndex];
           this.setSong(this.currentAlbum, song);
