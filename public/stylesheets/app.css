@@ -146,65 +146,69 @@ td.song-number {
   height: 150px;
   background: rgba(255, 255, 255, 0.3);
   z-index: 100; }
-  .player-bar a, .player-bar a:hover {
-    color: white;
-    cursor: pointer;
-    text-decoration: none; }
-  .player-bar .container {
-    display: table;
-    padding: 0;
-    min-height: 100%; }
-  .player-bar .left-controls {
-    width: 25%;
-    text-align: left; }
-  .player-bar .right-controls {
-    width: 25%;
-    text-align: right; }
-  .player-bar .play-controls a {
-    font-size: 20px;
-    vertical-align: middle; }
-  .player-bar .play-controls .previous {
-    margin-right: 65px; }
-  .player-bar .play-controls .play-pause {
-    margin-right: 60px;
-    font-size: 30px; }
-  .player-bar .play-controls .previous, .player-bar .play-controls .next, .player-bar .play-controls .play-pause {
-    opacity: 1;
-    transition: 0.3s opacity; }
-  .player-bar .play-controls .previous:hover, .player-bar .play-controls .next:hover, .player-bar .play-controls .play-pause:hover {
-    opacity: 0.5;
-    transition: 0.3s opacity; }
-  .player-bar .currently-playing {
-    width: 50%;
+
+a, a:hover {
+  color: white;
+  cursor: pointer;
+  text-decoration: none; }
+
+.container {
+  display: table;
+  padding: 0;
+  min-height: 100%; }
+
+.left-controls {
+  width: 25%;
+  text-align: left; }
+
+.right-controls {
+  width: 25%;
+  text-align: right; }
+
+.play-controls a {
+  font-size: 20px;
+  vertical-align: middle; }
+.play-controls .previous {
+  margin-right: 65px; }
+.play-controls .play-pause {
+  margin-right: 60px;
+  font-size: 30px; }
+.play-controls .previous, .play-controls .next, .play-controls .play-pause {
+  opacity: 1;
+  transition: 0.3s opacity; }
+.play-controls .previous:hover, .play-controls .next:hover, .play-controls .play-pause:hover {
+  opacity: 0.5;
+  transition: 0.3s opacity; }
+.play-controls .currently-playing {
+  width: 50%;
+  text-align: center;
+  position: relative; }
+  .play-controls .currently-playing .song-name, .play-controls .currently-playing .artist-name {
     text-align: center;
-    position: relative; }
-    .player-bar .currently-playing .song-name, .player-bar .currently-playing .artist-name {
-      text-align: center;
-      margin: 0;
-      position: absolute;
-      width: 100%;
-      font-size: 16px;
-      font-weight: 300; }
-    .player-bar .currently-playing .song-name {
-      top: 20px; }
-    .player-bar .currently-playing .artist-name {
-      bottom: 20px; }
-  .player-bar .queue-toggle {
+    margin: 0;
+    position: absolute;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 300; }
+  .play-controls .currently-playing .song-name {
+    top: 20px; }
+  .play-controls .currently-playing .artist-name {
+    bottom: 20px; }
+.play-controls .queue-toggle {
+  display: inline-block;
+  margin-left: 75px; }
+  .play-controls .queue-toggle i {
+    font-size: 20px; }
+.play-controls .volume {
+  display: inline-block; }
+  .play-controls .volume i {
+    width: 40px;
+    font-size: 20px;
     display: inline-block;
-    margin-left: 75px; }
-    .player-bar .queue-toggle i {
-      font-size: 20px; }
-  .player-bar .volume {
-    display: inline-block; }
-    .player-bar .volume i {
-      width: 40px;
-      font-size: 20px;
-      display: inline-block;
-      vertical-align: middle; }
-    .player-bar .volume .seek-bar {
-      display: inline-block;
-      width: 100px;
-      vertical-align: middle; }
+    vertical-align: middle; }
+  .play-controls .volume .slider {
+    display: inline-block;
+    width: 100px; }
 
 .player-bar-control-group {
   display: table-cell;
@@ -220,18 +224,15 @@ td.song-number {
     right: 0;
     top: 10px; }
 
-.seek-bar {
+.slider {
   height: 5px;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 2px;
-  position: relative;
-  cursor: pointer; }
-  .seek-bar .fill {
+  background: rgba(255, 255, 255, 0.3); }
+  .slider .fill {
     background: white;
     width: 36%;
     height: 5px;
     border-radius: 2px; }
-  .seek-bar .thumb {
+  .slider .thumb {
     position: absolute;
     height: 10px;
     width: 10px;
@@ -243,9 +244,9 @@ td.song-number {
     border-radius: 50%;
     cursor: pointer;
     transition: all 100ms ease-in-out; }
-  .seek-bar.no-animate .fill, .seek-bar.no-animate .thumb {
+  .slider:active .fill, .slider:active .thumb {
     transition: none; }
-  .seek-bar:hover .thumb {
+  .slider:hover .thumb, .slider:active .thumb {
     width: 20px;
     height: 20px;
     margin-top: -10px;

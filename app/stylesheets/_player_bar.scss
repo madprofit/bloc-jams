@@ -6,7 +6,7 @@
     height: 150px;
     background: rgba(255, 255, 255, 0.3);
     z-index: 100;
- 
+ }
     a, a:hover {
       color: white;
       cursor: pointer;
@@ -57,7 +57,7 @@
         opacity: .5;
         transition: .3s opacity;
       }
-    }
+    
  
     .currently-playing {
       width: 50%;
@@ -78,7 +78,7 @@
       .artist-name {
         bottom: 20px;
       }
-    }
+    
  
     .queue-toggle {
       display: inline-block;
@@ -99,10 +99,9 @@
         vertical-align: middle;
       }
  
-      .seek-bar {
+      .slider {
         display: inline-block;
         width: 100px;
-        vertical-align: middle;
       }
     }
   }
@@ -126,12 +125,9 @@
     }
   }
  
-  .seek-bar {
+  .slider {
     height: 5px;
     background: rgba(255, 255, 255, 0.3);
-    border-radius: 2px;
-    position: relative;
-    cursor: pointer;
  
     .fill {
       background: white;
@@ -154,13 +150,13 @@
       transition: all 100ms ease-in-out;
     }
  
-    &.no-animate {
+    &:active {
       .fill, .thumb {
         transition: none;
       }
     }
  
-    &:hover .thumb {
+    &:hover .thumb, &:active .thumb {
       width: 20px;
       height: 20px;
       margin-top: -10px;
