@@ -279,11 +279,12 @@ var setupSeekBars = function() {
    year: '1881',
    albumArtUrl: '/images/album-placeholder.png',
    songs: [
-       { name: 'Blue', length: '4:26', audioUrl: '/music/placeholders/blue' },
-       { name: 'Green', length: '3:14', audioUrl: '/music/placeholders/green' },
-       { name: 'Red', length: '5:01', audioUrl: '/music/placeholders/red' },
-       { name: 'Pink', length: '3:21', audioUrl: '/music/placeholders/pink' },
-       { name: 'Magenta', length: '2:15', audioUrl: '/music/placeholders/magenta' },
+      { name: 'Blue', length: 163.38, audioUrl: '/music/placeholders/blue' },
+      { name: 'Green', length: 105.66 , audioUrl: '/music/placeholders/green' },
+      { name: 'Red', length: 270.14, audioUrl: '/music/placeholders/red' },
+      { name: 'Pink', length: 154.81, audioUrl: '/music/placeholders/pink' },
+      { name: 'Magenta', length: 375.92, audioUrl: '/music/placeholders/magenta' }
+
      ]
  };
 
@@ -380,9 +381,16 @@ blocJams.controller('Landing.controller', ['$scope', function($scope) {
 
   blocJams.controller('PlayerBar.controller', ['$scope', 'SongPlayer', function($scope, SongPlayer) {
   $scope.songPlayer = SongPlayer;
+
+    SongPlayer.onTimeUpdate(function(event, time){
+      $scope.$apply(function(){
+        $scope.playTime = time;
+      });
+    });
+
 }]);
 
-    blocJams.service('SongPlayer', function() {
+    blocJams.service('SongPlayer', ['$rootScope', function($rootScope) {
         var currentSoundFile = null;
         var trackIndex = function(album, song) {
           return album.songs.indexOf(song);
@@ -421,47 +429,87 @@ blocJams.controller('Landing.controller', ['$scope', function($scope) {
           this.playing = false;
             currentSoundFile.pause();
         },
+          seek: function(time) {
+            //Checks to make sure that a sound file is playing before seeking
+            if(currentSoundFile) {
+              // Uses a Buzz method to set the time of the song
+              currentSoundFile.setTime(time);
+            }
+          },
+            onTimeUpdate: function(callback) {
+              return $rootScope.$on('sound:timeupdate', callback);
+            },
         setSong: function(album, song) {
             if (currentSoundFile) {
               currentSoundFile.stop();
             }
           this.currentAlbum = album;
           this.currentSong = song;
-            currentSoundFile = new buzz.sound(song.audioUrl, {
-              formats: [ "mp3" ],
-              preload: true
+
+          currentSoundFile = new buzz.sound(song.audioUrl, {
+            formats: [ "mp3" ],
+            preload: true
+          });
+
+            currentSoundFile.bind('timeupdate', function(e){
+              $rootScope.$broadcast('sound:timeupdate', this.getTime());
             });
 
             this.play();
         }
+
       };
-    });
+    }]);
 
 blocJams.directive('slider', ['$document', function($document){
   // Returns a number between 0 and 1 to determine where the mouse event happened along the slider bar.
   var calculateSliderPercentFromMouseEvent = function($slider, event) {
-    var offset = event.pageX - $slider.offset().left; // Distance from left
+    var offsetX = event.pageX - $slider.offset().left; // Distance from left
     var sliderWidth = $slider.width(); //Width of slider
     var offsetXPercent = (offsetX / sliderWidth);
     offsetXPercent = Math.max(0, offsetXPercent);
     offsetXPercent = Math.min(1, offsetXPercent);
     return offsetXPercent;
       };
-      
-  return {
+
+    return {
     templateUrl: '/templates/directives/slider.html',
     replace: true,
     restrict: 'E',
-      scope: {}, // Creates a scope that exists only in this directive
+      scope: {
+        onChange: '&'
+      },
     link: function(scope, element, attributes) {
          // These values represent the progress into the song/volume bar, and its max value.
        // For now, we're supplying arbitrary initial and max values.
         scope.value = 0;
-        scope.max = 200;
+        scope.max = 100;
       var $seekBar = $(element);
 
+        attributes.$observe('value', function(newValue) {
+          scope.value = numberFromValue(newValue, 0);
+        });
+
+        attributes.$observe('max', function(newValue) {
+          scope.max = numberFromValue(newValue, 100) || 100;
+        });
+
+        var numberFromValue = function(value, defaultValue) {
+          if (typeof value === 'number') {
+            return value;
+          }
+          if(typeof value === 'undefined') {
+            return defaultValue;
+          }
+          if(typeof value === 'string') {
+            return Number(value);
+          }
+         }
+
         var percentString = function () {
-          var percent = Number(scope.value) / Number(scope.max) * 100;
+          var value = scope.value || 0;
+          var max = scope.max || 100;
+          percent = value / max * 100;
           return percent + "%";
         }
         
@@ -469,20 +517,22 @@ blocJams.directive('slider', ['$document', function($document){
           return {width: percentString()};
         }
 
-        scope.thumbstyle = function() {
+        scope.thumbStyle = function() {
           return {left: percentString()};
         }
-    }
-  }
+
         scope.onClickSlider = function(event) {
           var percent = calculateSliderPercentFromMouseEvent($seekBar, event);
           scope.value = percent * scope.max;
+            notifyCallback(scope.value);
         }
+
         scope.trackThumb = function () {
           $document.bind('mousemove.thumb', function(event) {
             var percent = calculateSliderPercentFromMouseEvent($seekBar, event);
             scope.$apply(function(){
               scope.value = percent * scope.max;
+                notifyCallback(scope.value);
             });
           });
 
@@ -492,7 +542,44 @@ blocJams.directive('slider', ['$document', function($document){
           $document.unbind('mouseup.thumb');
         });
         };
+
+        var notifyCallback = function(newValue) {
+          if(typeof scope.onChange === 'function') {
+            scope.onChange({value: newValue});
+          }
+        };
+    }
+  }
 }]);
+
+blocJams.filter('timecode', function(){
+  return function(seconds) {
+    seconds = Number.parseFloat(seconds);
+
+    // Returned when no time is provided.
+    if (Number.isNaN(seconds)) {
+      return '-:--';
+    }
+
+    //make it a whole number
+    var wholeSeconds = Math.floor(seconds);
+
+    var minutes = Math.floor(wholeSeconds / 60);
+
+    remainingSeconds = wholeSeconds % 60;
+
+    var output = minutes + ':';
+
+    // zero pad seconds, so 9 seconds should be :09
+    if (remainingSeconds < 10) {
+      output += '0';
+    }
+
+    output += remainingSeconds;
+
+    return output;
+  }
+})
 
 });
 

@@ -5,7 +5,7 @@
       <img ng-src="{{ album.albumArtUrl}}" />
       </div>
 
-      <div class='album-header-information col-md-push-1'> <!-- Album Information -->
+      <div class='album-header-information col-md-8 col-md-push-1'> <!-- Album Information -->
         <h3 class='album-title'> {{ album.name }}</h3>
         <h4 class='album-artist'> {{ album.artist }}</h4>
         <h5 class='album-meta-info'> {{ album.year }} on {{ album.label }}</h5>
@@ -34,7 +34,7 @@
           </span> 
         </td>
         <td class="col-md-9"> {{ song.name }} </td>
-        <td class="col-md-2"> {{ song.length }} </td>
+        <td class="col-md-2"> {{ song.length | timecode }} </td>
        </tr>
     </table>
   </div>
